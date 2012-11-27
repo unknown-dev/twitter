@@ -77,7 +77,7 @@ module Twitter
       #   @param options [Hash] A customizable set of options.
       def favorite(*args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           begin
             object_from_response(Twitter::Tweet, :post, "/1.1/favorites/create.json", options.merge(:id => id))
           rescue Twitter::Error::Forbidden => error
@@ -107,7 +107,7 @@ module Twitter
       #   @param options [Hash] A customizable set of options.
       def favorite!(*args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           begin
             object_from_response(Twitter::Tweet, :post, "/1.1/favorites/create.json", options.merge(:id => id))
           rescue Twitter::Error::Forbidden => error

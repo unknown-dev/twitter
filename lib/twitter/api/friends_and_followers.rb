@@ -163,7 +163,7 @@ module Twitter
         # Twitter always turns on notifications if the "follow" option is present, even if it's set to false
         # so only send follow if it's true
         options[:follow] = true if !!options.delete(:follow)
-        args.flatten.threaded_map do |user|
+        args.flatten.pmap do |user|
           begin
             merge_user!(options, user)
             object_from_response(Twitter::User, :post, "/1.1/friendships/create.json", options)

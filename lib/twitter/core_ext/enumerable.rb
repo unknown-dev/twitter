@@ -1,23 +1,12 @@
+require 'celluloid'
+
 module Enumerable
 
-  def threaded_map
-    abort_on_exception do
-      threads = []
-      each do |object|
-        threads << Thread.new { yield object }
-      end
-      threads.map(&:value)
+  def pmap(&block)
+    futures = map do |elem|
+      Celluloid::Future.new(elem, &block)
     end
-  end
-
-private
-
-  def abort_on_exception
-    initial_abort_on_exception = Thread.abort_on_exception
-    Thread.abort_on_exception ||= true
-    yield
-  ensure
-    Thread.abort_on_exception = initial_abort_on_exception
+    futures.map(&:value)
   end
 
 end

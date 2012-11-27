@@ -145,7 +145,7 @@ module Twitter
       #   @option options [Boolean, String, Integer] :trim_user Each tweet returned in a timeline will include a user object with only the author's numerical ID when set to true, 't' or 1.
       def retweet(*args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           begin
             post_retweet(id, options)
           rescue Twitter::Error::Forbidden => error
@@ -172,7 +172,7 @@ module Twitter
       #   @option options [Boolean, String, Integer] :trim_user Each tweet returned in a timeline will include a user object with only the author's numerical ID when set to true, 't' or 1.
       def retweet!(*args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           begin
             post_retweet(id, options)
           rescue Twitter::Error::Forbidden => error
@@ -249,7 +249,7 @@ module Twitter
       #   @option options [String] :lang Language code for the rendered embed. This will affect the text and localization of the rendered HTML.
       def oembeds(*args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           object_from_response(Twitter::OEmbed, :get, "/1.1/statuses/oembed.json?id=#{id}", options)
         end
       end
@@ -262,7 +262,7 @@ module Twitter
       # @return [Array<Twitter::Tweet>]
       def threaded_tweets_from_response(request_method, path, args)
         options = extract_options!(args)
-        args.flatten.threaded_map do |id|
+        args.flatten.pmap do |id|
           object_from_response(Twitter::Tweet, request_method, path + "/#{id}.json", options)
         end
       end

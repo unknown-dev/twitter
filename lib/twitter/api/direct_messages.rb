@@ -96,7 +96,7 @@ module Twitter
         if args.empty?
           direct_messages_received(options)
         else
-          args.flatten.threaded_map do |id|
+          args.flatten.pmap do |id|
             direct_message(id, options)
           end
         end
