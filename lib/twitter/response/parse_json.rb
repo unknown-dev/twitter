@@ -10,7 +10,7 @@ module Twitter
         when /\A^\s*$\z/, nil
           nil
         else
-          MultiJson.parse(body)
+          MultiJson.decode(body)
         end
       end
 
