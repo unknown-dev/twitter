@@ -10,7 +10,7 @@ module Twitter
         when /\A^\s*$\z/, nil
           nil
         else
-          MultiJson.load(body, :symbolize_keys => true)
+          MultiJson.parse(body)
         end
       end
 
